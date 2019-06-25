@@ -6,7 +6,7 @@ Technologies:
 - Angular 7.3.8
 - Typescript 3.5.1
 - Bootstrap 4
-- ng-animate
+- ng-animate 0.3.4
 
 ## Development server
 
