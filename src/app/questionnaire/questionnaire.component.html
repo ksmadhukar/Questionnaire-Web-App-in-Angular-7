@@ -1,0 +1,83 @@
+<div class="flex-container" *ngIf="surveyList">
+  <div *ngIf="!show" class="welcome-screen">
+    <h1 class="title bounceInUp">{{surveyList.questionnaire.name}}</h1>
+    <h3 class="desc bounceInUp">{{surveyList.questionnaire.description}}</h3>
+    <div class="btn-wrap wrapper-light bounceInUp timeDelay" @fade>
+      <div class="btn-border">
+        <div class="btn-border-inner">
+          <button (click)="toggle()" class="btn">Ja, Fahre fort</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="show" class="question-wrap" >
+    <div class="list-block" *ngIf="!isValid">
+      <div *ngFor="let question of surveyList.questionnaire.questions;let i=index">
+        <div *ngIf="VisibleIndex===i">
+          <div class="question font26 text-white mb-4 bounceInUp text-left">
+            <span class="font20 mr-2">{{i+1}}</span>
+            <span class="SVGInline">
+              <svg class="SVGInline-svg" width="11" height="10" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><g fillrule="nonzero"><path d="M7.586 5L4.293 1.707 5.707.293 10.414 5 5.707 9.707 4.293 8.293z"></path><path d="M8 4v2H0V4z"></path></g></svg>
+            </span> 
+            {{question.headline}}
+          </div>
+
+          <div class="choices bounceInUp timeDelay" *ngIf="question.question_type==='multiple-choice'">
+            <ul class="list-unstyled text-left">
+              <li class="text-white choice-wrap position-relative" *ngFor="let choice of question.choices;let j=index" >
+                <label class="numbering-label position-absolute m-3">{{j+1}}</label>
+                <label class="choice-checkbox w-100 m-0" [ngClass]="{'blink': choice.selected }">
+                  <input class="choice-input" type="checkbox" [(ngModel)]="choice.selected" (change)="ClickChoices(question.multiple,i,j)">
+                  <span class="choice-desc">{{choice.label}}</span>
+                  <span class="SVGInline choice-indicator position-absolute"><svg class="SVGInline-svg" width="16" height="13" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path fillrule="nonzero" d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z"></path></svg></span>
+                </label>
+              </li>
+            </ul>
+            <div>
+            </div>
+          </div>
+          <div *ngIf="question.question_type==='text'" class="bounceInUp timeDelay">
+            <div class="input-wrap">
+              <input type="text" [(ngModel)]="question.value" placeholder="Type your text here" />
+              <label class="input-label input__label-color-1"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer position-fixed p-3">
+      <div class="percentage-wrap float-left">
+        <app-percentage-block [Percentage]="Percentage"></app-percentage-block>
+      </div>
+      <div class="prev-next float-right">
+        <button class="btn-prev mr-2" [disabled]="VisibleIndex===0" (click)="PrevQuestion()" *ngIf="!isValid">
+          <span class="SVGInline"><svg class="SVGInline-svg" width="14" height="9" viewBox="0 0 14 9" xmlns="http://www.w3.org/2000/svg">
+            <path fillrule="nonzero" d="M11.996 8.121l1.414-1.414L6.705 0 0 6.707l1.414 1.414 5.291-5.293z"></path></svg></span>
+        </button>
+        <button class="btn-next" (click)="NextQuestion()"
+          *ngIf="VisibleIndex!==surveyList.questionnaire.questions.length-1">
+          <span class="SVGInline"><svg class="SVGInline-svg" width="14" height="9" xmlns="http://www.w3.org/2000/svg">
+              <path fillrule="nonzero" d="M12.293.293l1.414 1.414L7 8.414.293 1.707 1.707.293 7 5.586z"></path>
+            </svg></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="flex-center flex-column" *ngIf="message==='success'">
+    <img class="bounceInUp mb-5 width320" alt="" src="assets/thanks.png">
+    <h3 class="bounceInUp timeDelay">Vielen Dank für die Bereitstellung der angeforderten Informationen</h3>
+  </div>
+  <div class="error mb-4" *ngIf="message==='error'">
+      <p class="font14 m-0">Please fill atleast 1 question</p>
+  </div>
+  
+  <div class="btn-wrap wrapper-light" 
+  *ngIf="VisibleIndex===surveyList.questionnaire.questions.length-1">
+    <div class="btn-border" *ngIf="!isValid">
+      <div class="btn-border-inner">
+        <button class="btn" (click)="DoneQuestion()">Send Comments</button>
+      </div>
+    </div>
+  </div>
+</div>  
