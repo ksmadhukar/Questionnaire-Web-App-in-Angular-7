@@ -1,6 +1,12 @@
-# SueryApp
+# Questionnaire Web App
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+
+Technologies: 
+- Angular 7.3.8
+- Typescript 3.5.1
+- Bootstrap 4
+- ng-animate
 
 ## Development server
 
